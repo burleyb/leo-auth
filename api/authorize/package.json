@@ -1,0 +1,26 @@
+{
+  "name": "authorize",
+  "version": "1.0.0",
+  "description": "This is a sample ApiGateway Description",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --recursive -w "
+  },
+  "config": {
+    "leo": {
+      "type": "resource",
+      "uri": "PUT:/api/authorize",
+      "name": "Leo_Auth_authorize",
+      "handler": "handler",
+      "role": "ApiRole",
+      "memory": 128,
+      "timeout": 3
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

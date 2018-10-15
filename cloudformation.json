@@ -1,0 +1,620 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Mappings": {
+    "RegionMap": {
+      "us-east-1": {
+        "S3Bucket": "leo-cli-publishbucket-166d6oumno1f5"
+      },
+      "us-west-2": {
+        "S3Bucket": "leo-cli-publishbucket-1rgojx1iw5yq9"
+      }
+    }
+  },
+  "Metadata": {},
+  "Resources": {
+    "RestApi": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Description": "This is a sample BOT Description",
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-auth"
+        },
+        "Body": {
+          "swagger": "2.0",
+          "info": {
+            "version": "1.0.3",
+            "title": "auth"
+          },
+          "basePath": "/",
+          "schemes": [
+            "https"
+          ],
+          "paths": {
+            "/api/authorize": {
+              "put": {
+                "produces": [
+                  "application/json"
+                ],
+                "security": [
+                  {
+                    "sigv4": []
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "200 response",
+                    "schema": {
+                      "$ref": "#/definitions/Empty"
+                    },
+                    "headers": {
+                      "Access-Control-Allow-Origin": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "x-amazon-apigateway-integration": {
+                  "responses": {
+                    "default": {
+                      "statusCode": "200"
+                    }
+                  },
+                  "uri": {
+                    "Fn::Sub": "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${Authorize.Arn}/invocations"
+                  },
+                  "passthroughBehavior": "when_no_match",
+                  "httpMethod": "POST",
+                  "contentHandling": "CONVERT_TO_TEXT",
+                  "type": "aws_proxy"
+                }
+              }
+            }
+          },
+          "securityDefinitions": {
+            "sigv4": {
+              "type": "apiKey",
+              "name": "Authorization",
+              "in": "header",
+              "x-amazon-apigateway-authtype": "awsSigv4"
+            }
+          },
+          "definitions": {
+            "Empty": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    "ApiRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ],
+                "AWS": {
+                  "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:root"
+                }
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        ],
+        "Policies": [
+          {
+            "PolicyName": "BasicPolicy",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "lambda:AddPermission"
+                  ],
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "AuthInstall": {
+      "Type": "Custom::Install",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LeoAuthInstall",
+            "Arn"
+          ]
+        },
+        "Version": "1.0.2"
+      },
+      "DependsOn": [
+        "LeoAuthInstall",
+        "LeoAuthPolicy",
+        "LeoAuthIdentity",
+        "LeoAuthUser",
+        "LeoAuth"
+      ]
+    },
+    "LeoAuth": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "identity",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "identity",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": "100",
+          "WriteCapacityUnits": "10"
+        }
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "addcc5fb-410b-412d-be0d-493cc91ad2e9"
+        }
+      }
+    },
+    "LeoAuthUser": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "identity_id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "identity_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": "100",
+          "WriteCapacityUnits": "10"
+        }
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "528ecd4d-1b8f-43c1-a793-b22d0333c4df"
+        }
+      }
+    },
+    "LeoAuthPolicy": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "name",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "name",
+            "KeyType": "HASH"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": "3",
+          "WriteCapacityUnits": "3"
+        },
+        "StreamSpecification": {
+          "StreamViewType": "NEW_IMAGE"
+        }
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "6dab2776-1bb2-4a3b-a692-ddd36cd32a53"
+        }
+      }
+    },
+    "LeoAuthIdentity": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "identity",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "policy",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "identity",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "policy",
+            "KeyType": "RANGE"
+          }
+        ],
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": "5",
+          "WriteCapacityUnits": "5"
+        },
+        "StreamSpecification": {
+          "StreamViewType": "KEYS_ONLY"
+        },
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "policy-identity-id",
+            "KeySchema": [
+              {
+                "AttributeName": "policy",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "identity",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "KEYS_ONLY"
+            },
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": "5",
+              "WriteCapacityUnits": "5"
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "b6a65016-69fc-4796-bde6-3c6ab7c0edd0"
+        }
+      }
+    },
+    "LeoAuthPolicyEventSource": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "Properties": {
+        "BatchSize": 1,
+        "Enabled": true,
+        "StartingPosition": "TRIM_HORIZON",
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "LeoAuthPolicy",
+            "StreamArn"
+          ]
+        },
+        "FunctionName": {
+          "Ref": "LeoAuthWatch"
+        }
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "ae9721af-75ed-4ff9-b3e9-d7135b4568db"
+        }
+      },
+      "DependsOn": [
+        "LeoAuthPolicy"
+      ]
+    },
+    "LeoAuthIdentityEventSource": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "Properties": {
+        "BatchSize": 1,
+        "Enabled": true,
+        "StartingPosition": "TRIM_HORIZON",
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "LeoAuthIdentity",
+            "StreamArn"
+          ]
+        },
+        "FunctionName": {
+          "Ref": "LeoAuthWatch"
+        }
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "91d08a05-c1d6-4bee-ade5-a8dc472e88d0"
+        }
+      },
+      "DependsOn": [
+        "LeoAuthIdentity"
+      ]
+    },
+    "LeoAuthManagedPolicy": {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetItem"
+              ],
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "LeoAuth",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::GetAtt": [
+                    "LeoAuthUser",
+                    "Arn"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "e6d9c164-8136-451b-a718-cb47362ea052"
+        }
+      }
+    },
+    "LeoAuthRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        ],
+        "Policies": [
+          {
+            "PolicyName": "Leo_Auth_watch",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:PutItem",
+                    "dynamodb:BatchWriteItem",
+                    "dynamodb:BatchGetItem",
+                    "dynamodb:GetItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:GetRecords",
+                    "dynamodb:Query",
+                    "dynamodb:Scan",
+                    "dynamodb:GetShardIterator",
+                    "dynamodb:DescribeStream",
+                    "dynamodb:ListStreams"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${AWS::StackName}-LeoAuth*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "62149dca-9d39-4bb6-a5d6-2b84441f88ff"
+        }
+      }
+    },
+    "Authorize": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::FindInMap": [
+              "RegionMap",
+              {
+                "Ref": "AWS::Region"
+              },
+              "S3Bucket"
+            ]
+          },
+          "S3Key": "auth/1.0.3/Authorize_1.0.0.zip"
+        },
+        "Description": "This is a sample ApiGateway Description",
+        "Handler": "index.handler",
+        "Environment": {
+          "Variables": {
+            "Resources": "{}"
+          }
+        },
+        "MemorySize": 128,
+        "Runtime": "nodejs6.10",
+        "Timeout": 3,
+        "Role": {
+          "Fn::Sub": "${ApiRole.Arn}"
+        }
+      }
+    },
+    "AuthorizeGatewayPermission": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "Authorize"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Sub": "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${RestApi}/*"
+        }
+      }
+    },
+    "LeoAuthWatch": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::FindInMap": [
+              "RegionMap",
+              {
+                "Ref": "AWS::Region"
+              },
+              "S3Bucket"
+            ]
+          },
+          "S3Key": "auth/1.0.3/LeoAuthWatch_1.0.0.zip"
+        },
+        "Description": "This is a sample BOT Description",
+        "Handler": "index.handler",
+        "Environment": {
+          "Variables": {
+            "Resources": {
+              "Fn::Sub": "{\"Region\":\"${AWS::Region}\",\"LeoAuth\":\"${LeoAuth}\",\"LeoAuthUser\":\"${LeoAuthUser}\",\"LeoAuthPolicy\":\"${LeoAuthPolicy}\",\"LeoAuthIdentity\":\"${LeoAuthIdentity}\"}"
+            }
+          }
+        },
+        "MemorySize": 128,
+        "Runtime": "nodejs6.10",
+        "Timeout": 3,
+        "Role": {
+          "Fn::Sub": "${LeoAuthRole.Arn}"
+        }
+      }
+    },
+    "LeoAuthInstall": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::FindInMap": [
+              "RegionMap",
+              {
+                "Ref": "AWS::Region"
+              },
+              "S3Bucket"
+            ]
+          },
+          "S3Key": "auth/1.0.3/LeoAuthInstall_1.0.0.zip"
+        },
+        "Description": "Installs Default policy",
+        "Handler": "index.handler",
+        "Environment": {
+          "Variables": {
+            "Resources": {
+              "Fn::Sub": "{\"Region\":\"${AWS::Region}\",\"LeoAuth\":\"${LeoAuth}\",\"LeoAuthUser\":\"${LeoAuthUser}\",\"LeoAuthPolicy\":\"${LeoAuthPolicy}\",\"LeoAuthIdentity\":\"${LeoAuthIdentity}\"}"
+            }
+          }
+        },
+        "MemorySize": 128,
+        "Runtime": "nodejs6.10",
+        "Timeout": 5,
+        "Role": {
+          "Fn::Sub": "${LeoAuthRole.Arn}"
+        }
+      }
+    },
+    "ApiDeployment": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "StageName": "Release"
+      }
+    },
+    "ApiDeployment1513361724721": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "StageName": "Release",
+        "Description": "Version: 1.0.1"
+      }
+    },
+    "ApiDeployment1516397752603": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "StageName": "Release",
+        "Description": "Version: 1.0.2"
+      }
+    },
+    "ApiDeployment1516405346937": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "StageName": "Release",
+        "Description": "Version: 1.0.3"
+      }
+    }
+  },
+  "Outputs": {
+    "Policy": {
+      "Description": "Policy for Read/Write to the Bus",
+      "Value": {
+        "Ref": "LeoAuthManagedPolicy"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-Policy"
+        }
+      }
+    },
+    "LeoAuth": {
+      "Description": "LeoAuth Table",
+      "Value": {
+        "Fn::Sub": "${LeoAuth}"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-LeoAuth"
+        }
+      }
+    },
+    "LeoAuthUser": {
+      "Description": "LeoAuthUser Table",
+      "Value": {
+        "Fn::Sub": "${LeoAuthUser}"
+      },
+      "Export": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-LeoAuthUser"
+        }
+      }
+    }
+  }
+}

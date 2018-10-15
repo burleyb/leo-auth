@@ -1,0 +1,40 @@
+{
+  "name": "auth",
+  "version": "1.0.3",
+  "description": "This is a sample BOT Description",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --recursive -w --require ./test/bootstrap.js",
+    "start": "leo test ."
+  },
+  "config": {
+    "leo": {
+      "type": "microservice",
+      "name": "Leo_Auth",
+      "restApiId": {
+        "ref": "auth.restapi"
+      },
+      "aws": {
+        "role": {
+          "ref": "auth.roles.LeoAuthRole"
+        }
+      },
+      "regions": [
+        "us-west-2",
+        "us-east-1"
+      ],
+      "3rdParty": true,
+      "excludeProfiles": true
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.1",
+    "leo-auth": "^1.0.3"
+  }
+}

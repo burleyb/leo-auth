@@ -1,0 +1,298 @@
+[{
+  "recordType": "S",
+  "trackingNumber": "0004613429682",
+  "dates": {
+    "pickup": "2016-03-29T06:00:00.000Z",
+    "export": null,
+    "import": null,
+    "brockerPickup": null,
+    "brockerReturn": null,
+    "customsClearance": null,
+    "brockerNotify": null,
+    "hold": null,
+    "offHold": null,
+    "delivery": null,
+    "event": "2016-03-29T06:00:00.000Z",
+    "expectedDelivery": null
+  },
+  "dhl": {
+    "originStation": "TMB",
+    "destinationStation": "BOG"
+  },
+  "pieces": "0000001",
+  "weights": {
+    "chargeable": "0000000.500",
+    "actual": "0000.50",
+    "unit": "L"
+  },
+  "masterBill": "0",
+  "airlineCode": "000",
+  "flight": "",
+  "arrival": "",
+  "billTo": "S",
+  "charges": {
+    "freight": "0000000.00",
+    "miscellaneous": "0000000.00",
+    "total": "0000000.00"
+  },
+  "customsValue": "0.010",
+  "currencyType": "USD",
+  "shipper": {
+    "number": "00858798562",
+    "name": "ZIX CORPORATION",
+    "address1": "2355 SALZEDO STREET",
+    "address2": "",
+    "address3": "",
+    "city": "CORAL GABLES",
+    "state": "FL",
+    "postalCode": "33134",
+    "country": "US",
+    "reference": "ZIX-16-01669"
+  },
+  "consignee": {
+    "number": "00000000000",
+    "name": "ZARATRANS",
+    "address1": "CALLE 114 NO. 67-57",
+    "address2": "",
+    "address3": "",
+    "city": "BOGOTA",
+    "state": "",
+    "postalCode": "",
+    "country": "CO",
+    "reference": ""
+  },
+  "payer": {
+    "number": "00000000000",
+    "name": ""
+  },
+  "productTypeCode": "PB",
+  "mode": "AIR",
+  "serviceType": "EX",
+  "storage": "",
+  "statusEventCode": "PU:PICK UP",
+  "signature": "",
+  "finalShipmentStatusEvent": "",
+  "times": {
+    "event": "16:59",
+    "expectedDelivery": "00:00",
+    "pickup": "16:59"
+  },
+  "reweigh": "R",
+  "sds": "",
+  "domesticInternationalCode": "I",
+  "shipment": {
+    "description": "CORRESPONDENCE/NO COMMERCIAL VALUE"
+  },
+  "thirdParty": {
+    "address1": "",
+    "address2": "",
+    "address3": "",
+    "city": "",
+    "state": "",
+    "postalCode": "",
+    "country": ""
+  },
+  "filler": "T",
+  "eventStationCode": "MB",
+  "paymentMethod": "U",
+  "packageTypeCode": "V",
+  "tradingPartnerID": ""
+}, {
+  "recordType": "S",
+  "trackingNumber": "0007979269712",
+  "dates": {
+    "pickup": "2016-03-29T06:00:00.000Z",
+    "export": null,
+    "import": null,
+    "brockerPickup": null,
+    "brockerReturn": null,
+    "customsClearance": null,
+    "brockerNotify": null,
+    "hold": null,
+    "offHold": null,
+    "delivery": null,
+    "event": "2016-03-29T06:00:00.000Z",
+    "expectedDelivery": null
+  },
+  "dhl": {
+    "originStation": "TMB",
+    "destinationStation": "GYE"
+  },
+  "pieces": "0000001",
+  "weights": {
+    "chargeable": "0000000.500",
+    "actual": "0000.50",
+    "unit": "L"
+  },
+  "masterBill": "0",
+  "airlineCode": "000",
+  "flight": "",
+  "arrival": "",
+  "billTo": "S",
+  "charges": {
+    "freight": "0000000.00",
+    "miscellaneous": "0000000.00",
+    "total": "0000000.00"
+  },
+  "customsValue": "0.010",
+  "currencyType": "USD",
+  "shipper": {
+    "number": "00858798562",
+    "name": "ZIX CORPORATION",
+    "address1": "2355 SALZEDO STREET",
+    "address2": "",
+    "address3": "",
+    "city": "CORAL GABLES",
+    "state": "FL",
+    "postalCode": "33134",
+    "country": "US",
+    "reference": "ZIX-16-01704"
+  },
+  "consignee": {
+    "number": "00000000000",
+    "name": "SIKA ECUATORIANA",
+    "address1": "KM 3.5 VIA DURAN - TAMBO",
+    "address2": "",
+    "address3": "",
+    "city": "GUAYAQUIL",
+    "state": "",
+    "postalCode": "",
+    "country": "EC",
+    "reference": ""
+  },
+  "payer": {
+    "number": "00000000000",
+    "name": ""
+  },
+  "productTypeCode": "PB",
+  "mode": "AIR",
+  "serviceType": "EX",
+  "storage": "",
+  "statusEventCode": "PU:PICK UP",
+  "signature": "",
+  "finalShipmentStatusEvent": "",
+  "times": {
+    "event": "16:59",
+    "expectedDelivery": "00:00",
+    "pickup": "22:21"
+  },
+  "reweigh": "R",
+  "sds": "",
+  "domesticInternationalCode": "I",
+  "shipment": {
+    "description": "CORRESPONDENCE/NO COMMERCIAL VALUE"
+  },
+  "thirdParty": {
+    "address1": "",
+    "address2": "",
+    "address3": "",
+    "city": "",
+    "state": "",
+    "postalCode": "",
+    "country": ""
+  },
+  "filler": "T",
+  "eventStationCode": "MB",
+  "paymentMethod": "U",
+  "packageTypeCode": "V",
+  "tradingPartnerID": ""
+}, {
+  "recordType": "S",
+  "trackingNumber": "0009167374790",
+  "dates": {
+    "pickup": "2016-03-29T06:00:00.000Z",
+    "export": null,
+    "import": null,
+    "brockerPickup": null,
+    "brockerReturn": null,
+    "customsClearance": null,
+    "brockerNotify": null,
+    "hold": null,
+    "offHold": null,
+    "delivery": null,
+    "event": "2016-03-29T06:00:00.000Z",
+    "expectedDelivery": null
+  },
+  "dhl": {
+    "originStation": "TMB",
+    "destinationStation": "LIM"
+  },
+  "pieces": "0000001",
+  "weights": {
+    "chargeable": "0000000.500",
+    "actual": "0000.50",
+    "unit": "L"
+  },
+  "masterBill": "0",
+  "airlineCode": "000",
+  "flight": "",
+  "arrival": "",
+  "billTo": "S",
+  "charges": {
+    "freight": "0000000.00",
+    "miscellaneous": "0000000.00",
+    "total": "0000000.00"
+  },
+  "customsValue": "0.000",
+  "currencyType": "USD",
+  "shipper": {
+    "number": "00858798562",
+    "name": "ZIX CORPORATION",
+    "address1": "2355 SALZEDO STREET",
+    "address2": "",
+    "address3": "",
+    "city": "CORAL GABLES",
+    "state": "FL",
+    "postalCode": "33134",
+    "country": "US",
+    "reference": "DOCUMENTS ZIX-16-01554"
+  },
+  "consignee": {
+    "number": "00000000000",
+    "name": "SIKA PERU S.A.",
+    "address1": "CENTRO INDUSTRIAL LAS PRE",
+    "address2": "DE LURIN S/N MZ\"B\" LOTE 5",
+    "address3": "",
+    "city": "LIMA",
+    "state": "",
+    "postalCode": "",
+    "country": "PE",
+    "reference": ""
+  },
+  "payer": {
+    "number": "00000000000",
+    "name": ""
+  },
+  "productTypeCode": "PB",
+  "mode": "AIR",
+  "serviceType": "EX",
+  "storage": "",
+  "statusEventCode": "PU:PICK UP",
+  "signature": "",
+  "finalShipmentStatusEvent": "",
+  "times": {
+    "event": "16:59",
+    "expectedDelivery": "00:00",
+    "pickup": "16:59"
+  },
+  "reweigh": "R",
+  "sds": "",
+  "domesticInternationalCode": "I",
+  "shipment": {
+    "description": "CORRESPONDENCE/NO COMMERCIAL V"
+  },
+  "thirdParty": {
+    "address1": "",
+    "address2": "",
+    "address3": "",
+    "city": "",
+    "state": "",
+    "postalCode": "",
+    "country": ""
+  },
+  "filler": "T",
+  "eventStationCode": "MB",
+  "paymentMethod": "U",
+  "packageTypeCode": "V",
+  "tradingPartnerID": ""
+}]
