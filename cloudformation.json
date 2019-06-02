@@ -3,10 +3,10 @@
   "Mappings": {
     "RegionMap": {
       "us-east-1": {
-        "S3Bucket": "leo-cli-publishbucket-166d6oumno1f5"
+        "S3Bucket": "leo-cli-publishbucket-abb4i613j9y9"
       },
       "us-west-2": {
-        "S3Bucket": "leo-cli-publishbucket-1rgojx1iw5yq9"
+        "S3Bucket": "leo-cli-publishbucket-mzhr7agmqo7u"
       }
     }
   },
@@ -458,7 +458,7 @@
           }
         },
         "MemorySize": 128,
-        "Runtime": "nodejs6.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 3,
         "Role": {
           "Fn::Sub": "${ApiRole.Arn}"
@@ -503,7 +503,7 @@
           }
         },
         "MemorySize": 128,
-        "Runtime": "nodejs6.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 3,
         "Role": {
           "Fn::Sub": "${LeoAuthRole.Arn}"
@@ -535,7 +535,7 @@
           }
         },
         "MemorySize": 128,
-        "Runtime": "nodejs6.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 5,
         "Role": {
           "Fn::Sub": "${LeoAuthRole.Arn}"
