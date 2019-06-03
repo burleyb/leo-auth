@@ -22,7 +22,7 @@
         "Body": {
           "swagger": "2.0",
           "info": {
-            "version": "1.0.3",
+            "version": "1.1.0",
             "title": "auth"
           },
           "basePath": "/",
@@ -448,7 +448,7 @@
               "S3Bucket"
             ]
           },
-          "S3Key": "auth/1.0.3/Authorize_1.0.0.zip"
+          "S3Key": "auth/1.0.4/Authorize_1.0.0.zip"
         },
         "Description": "This is a sample ApiGateway Description",
         "Handler": "index.handler",
@@ -491,7 +491,7 @@
               "S3Bucket"
             ]
           },
-          "S3Key": "auth/1.0.3/LeoAuthWatch_1.0.0.zip"
+          "S3Key": "auth/1.0.4/LeoAuthWatch_1.0.0.zip"
         },
         "Description": "This is a sample BOT Description",
         "Handler": "index.handler",
@@ -523,7 +523,7 @@
               "S3Bucket"
             ]
           },
-          "S3Key": "auth/1.0.3/LeoAuthInstall_1.0.0.zip"
+          "S3Key": "auth/1.0.4/LeoAuthInstall_1.0.0.zip"
         },
         "Description": "Installs Default policy",
         "Handler": "index.handler",
@@ -579,6 +579,26 @@
         },
         "StageName": "Release",
         "Description": "Version: 1.0.3"
+      }
+    },
+    "ApiDeployment1557959455436": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "StageName": "Release",
+        "Description": "Version: 1.0.4"
+      }
+    },
+    "ApiDeployment1559541549360": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "StageName": "Release",
+        "Description": "Version: 1.1.0"
       }
     }
   },
