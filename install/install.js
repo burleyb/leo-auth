@@ -12,7 +12,7 @@ var self = module.exports = base("Auth", [{
     return {
       Roles: module.exports.getRoles(resources),
       RestAPI: resources.AuthorizationGateway.id
-    }
+    };
   }
 }], {
   tasks: [
@@ -34,8 +34,8 @@ var self = module.exports = base("Auth", [{
             version: data.Attributes.version
           });
         }
-        done(err, data)
-      })
+        done(err, data);
+      });
     },
     (done) => {
       dynamodb.update("Leo_auth_identity", {
@@ -55,30 +55,30 @@ var self = module.exports = base("Auth", [{
         if (data.length == 0) {
           dynamodb.put("Leo_auth_policy", "*", {
             statements: [JSON.stringify({
-                Effect: "Allow",
-                Action: "auth:*",
-                Resource: "lrn:leo:auth:::*"
-              }),
-              JSON.stringify({
-                Effect: "Allow",
-                Action: "botmon:*",
-                Resource: "lrn:leo:botmon:::*"
-              }),
-              JSON.stringify({
-                Effect: "Allow",
-                Action: "micro:*",
-                Resource: "lrn:leo:micro:::*"
-              }),
-              JSON.stringify({
-                Effect: "Allow",
-                Action: "core:*",
-                Resource: "lrn:leo:core:::*"
-              }),
-              JSON.stringify({
-                Effect: "Allow",
-                Action: "dw:*",
-                Resource: "lrn:leo:dw:::*"
-              })
+              Effect: "Allow",
+              Action: "auth:*",
+              Resource: "lrn:leo:auth:::*"
+            }),
+            JSON.stringify({
+              Effect: "Allow",
+              Action: "botmon:*",
+              Resource: "lrn:leo:botmon:::*"
+            }),
+            JSON.stringify({
+              Effect: "Allow",
+              Action: "micro:*",
+              Resource: "lrn:leo:micro:::*"
+            }),
+            JSON.stringify({
+              Effect: "Allow",
+              Action: "core:*",
+              Resource: "lrn:leo:core:::*"
+            }),
+            JSON.stringify({
+              Effect: "Allow",
+              Action: "dw:*",
+              Resource: "lrn:leo:dw:::*"
+            })
             ]
           }, {
             id: "name"
@@ -97,7 +97,7 @@ var self = module.exports = base("Auth", [{
         "api": self.getVariable("auth.restapi")
       };
 
-      console.log(refs)
+      console.log(refs);
       util.addApiToRoles(
         [refs.authenticated, refs.unauthenticated],
         "leo_micro_exec",

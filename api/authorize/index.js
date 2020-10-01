@@ -1,5 +1,5 @@
 "use strict";
-var request = require("@leo-sdk/core/auth/request.js");
+var request = require("leo-auth");
 
 exports.handler = function (event, context, callback) {
 

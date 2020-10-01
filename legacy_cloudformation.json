@@ -3,17 +3,13 @@
   "Mappings": {
     "RegionMap": {
       "us-east-1": {
-        "S3Bucket": "leo-cli-publishbucket-1krooif6c32du"
+        "S3Bucket": "leo-cli-publishbucket-abb4i613j9y9"
       },
       "us-west-2": {
-        "S3Bucket": "leo-cli-publishbucket-1ib49osnzmi3c"
-      },
-      "ap-southeast-2": {
-        "S3Bucket": "leo-cli-publishbucket-1peyjitrpw1wd"
+        "S3Bucket": "leo-cli-publishbucket-mzhr7agmqo7u"
       }
     }
   },
-  "Metadata": {},
   "Resources": {
     "RestApi": {
       "Type": "AWS::ApiGateway::RestApi",
@@ -126,15 +122,6 @@
                     "lambda:AddPermission"
                   ],
                   "Resource": "*"
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "lambda:InvokeFunction"
-                  ],
-                  "Resource": {
-                    "Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-*"
-                  }
                 }
               ]
             }
@@ -420,16 +407,13 @@
               "S3Bucket"
             ]
           },
-          "S3Key": "auth/1.1.0/Authorize_1.0.0.zip"
+          "S3Key": "auth/1.0.4/Authorize_1.0.0.zip"
         },
         "Description": "This is a sample ApiGateway Description",
         "Handler": "index.handler",
         "Environment": {
           "Variables": {
-            "Resources": "{}",
-            "NODE_ENV": {
-              "Fn::Sub": "${Environment}"
-            }
+            "Resources": "{}"
           }
         },
         "MemorySize": 128,
@@ -466,7 +450,7 @@
               "S3Bucket"
             ]
           },
-          "S3Key": "auth/1.1.0/LeoAuthWatch_1.0.0.zip"
+          "S3Key": "auth/1.0.4/LeoAuthWatch_1.0.0.zip"
         },
         "Description": "This is a sample BOT Description",
         "Handler": "index.handler",
@@ -474,9 +458,6 @@
           "Variables": {
             "Resources": {
               "Fn::Sub": "{\"Region\":\"${AWS::Region}\",\"LeoAuth\":\"${LeoAuth}\",\"LeoAuthUser\":\"${LeoAuthUser}\",\"LeoAuthPolicy\":\"${LeoAuthPolicy}\",\"LeoAuthIdentity\":\"${LeoAuthIdentity}\"}"
-            },
-            "NODE_ENV": {
-              "Fn::Sub": "${Environment}"
             }
           }
         },
@@ -501,7 +482,7 @@
               "S3Bucket"
             ]
           },
-          "S3Key": "auth/1.1.0/LeoAuthInstall_1.0.0.zip"
+          "S3Key": "auth/1.0.4/LeoAuthInstall_1.0.0.zip"
         },
         "Description": "Installs Default policy",
         "Handler": "index.handler",
@@ -509,9 +490,6 @@
           "Variables": {
             "Resources": {
               "Fn::Sub": "{\"Region\":\"${AWS::Region}\",\"LeoAuth\":\"${LeoAuth}\",\"LeoAuthUser\":\"${LeoAuthUser}\",\"LeoAuthPolicy\":\"${LeoAuthPolicy}\",\"LeoAuthIdentity\":\"${LeoAuthIdentity}\"}"
-            },
-            "NODE_ENV": {
-              "Fn::Sub": "${Environment}"
             }
           }
         },
@@ -522,8 +500,57 @@
           "Fn::Sub": "${LeoAuthRole.Arn}"
         }
       }
-    },    
-    "ApiDeployment1601499152793": {
+    },
+    "ApiDeployment": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "StageName": "Release"
+      }
+    },
+    "ApiDeployment1513361724721": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "StageName": "Release",
+        "Description": "Version: 1.0.1"
+      }
+    },
+    "ApiDeployment1516397752603": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "StageName": "Release",
+        "Description": "Version: 1.0.2"
+      }
+    },
+    "ApiDeployment1516405346937": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "StageName": "Release",
+        "Description": "Version: 1.0.3"
+      }
+    },
+    "ApiDeployment1557959455436": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "RestApi"
+        },
+        "StageName": "Release",
+        "Description": "Version: 1.0.4"
+      }
+    },
+    "ApiDeployment1559541549360": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -534,15 +561,6 @@
       }
     }
   },
-  "Parameters": {
-    "Environment": {
-      "Type": "String",
-      "Default": "dev",
-      "MinLength": 1,
-      "Description": "Environment"
-    }
-  },
-  "Conditions": {},
   "Outputs": {
     "Policy": {
       "Description": "Policy for Read/Write to the Bus",
@@ -576,10 +594,6 @@
           "Fn::Sub": "${AWS::StackName}-LeoAuthUser"
         }
       }
-    },
-    "LeoTemplate": {
-      "Description": "Leo Template",
-      "Value": "/auth/1.1.0/cloudformation-1601499159911.json"
     }
   }
 }
