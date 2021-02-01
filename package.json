@@ -1,42 +1,40 @@
 {
-  "name": "auth",
-  "version": "1.1.0",
-  "description": "This is a sample BOT Description",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
+  "name": "leo-auth",
+  "version": "0.1.0",
+  "private": true,
+  "bin": {
+    "leo-auth": "bin/leo-auth.js"
   },
   "scripts": {
-    "test": "mocha --recursive -w --require ./test/bootstrap.js",
-    "start": "leo test ."
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk"
   },
-  "config": {
-    "leo": {
-      "type": "microservice",
-      "name": "Leo_Auth",
-      "restApiId": {
-        "ref": "auth.restapi"
-      },
-      "aws": {
-        "role": {
-          "ref": "auth.roles.LeoAuthRole"
-        }
-      },
-      "regions": [
-        "us-east-1",
-        "us-west-2",
-        "ap-southeast-2"
-      ],
-      "3rdParty": true,
-      "excludeProfiles": true
-    }
+  "peerDependencies": {
+    "aws-sdk": "^2.832.0"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "devDependencies": {
+    "@aws-cdk/assert": "1.87.0",
+    "@aws-cdk/aws-apigateway": "1.87.0",
+    "@aws-cdk/aws-dynamodb": "1.87.0",
+    "@aws-cdk/aws-events-targets": "1.87.0",
+    "@aws-cdk/aws-lambda-nodejs": "1.87.0",
+    "@aws-cdk/custom-resources": "1.87.0",
+    "@types/jest": "^26.0.10",
+    "@types/node": "10.17.27",
+    "aws-cdk": "1.87.0",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.2.0",
+    "ts-node": "^9.0.0",
+    "typescript": "~3.9.7"
+  },
   "dependencies": {
-    "aws-sdk": "^2.764.0",
-    "async": "^3.0.1",
-    "leo-auth": "^2.0.2"
+    "@aws-cdk/core": "1.87.0",
+    "async": "^3.2.0",
+    "leo-auth": "^3.0.1",
+    "leo-aws": "^2.0.1",
+    "leo-config": "^1.1.0",
+    "source-map-support": "^0.5.16"
   }
 }

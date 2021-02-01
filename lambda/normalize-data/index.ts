@@ -1,33 +1,39 @@
 var aws = require("aws-sdk");
-var auth = require("leo-auth");
-var dynamodb = auth.dynamodb;
+const config = require("leo-config");
+const env = process.env.LEO_ENVIRONMENT as string
+const resourcesJson = JSON.parse(process.env.Resources as string);
+config.bootstrap({ [env]: { leoaws: resourcesJson } })
+const leoAws = require("leo-aws");
+var dynamodb = leoAws.dynamodb;
 var async = require("async");
 
-let AUTH_TABLE = auth.configuration.resources.LeoAuth;
-let IDENTITY_TABLE = auth.configuration.resources.LeoAuthIdentity;
-let POLICY_TABLE = auth.configuration.resources.LeoAuthPolicy;
+let AUTH_TABLE = config.leoaws.LeoAuth;
+let IDENTITY_TABLE = config.leoaws.LeoAuthIdentity;
+let POLICY_TABLE = config.leoaws.LeoAuthPolicy;
 
-exports.handler = function (event, context, callback) {
-  var policies = [];
-  var identities = [];
+type Callback = (err: Error | null, data?: any) => void 
+interface Event { Records: any[] }
+interface Identity { identity?: any, policies?: any } 
+
+export function handler(event: Event, _: any, callback: Callback) {
   var record = event.Records[0]; //We limit to 1 event per call
   console.log(record.eventSourceARN);
   if (record.eventSourceARN.match(POLICY_TABLE)) {
-    console.log(record);
+    console.log(JSON.stringify(record, null, 2));
     var policy = aws.DynamoDB.Converter.unmarshall(record.dynamodb.NewImage);
-    console.log(policy);
-    dynamodb.docClient.query({
+    console.log(JSON.stringify(policy,null, 2));
+    dynamodb._service.query({
       TableName: IDENTITY_TABLE,
       IndexName: "policy-identity-id",
       KeyConditionExpression: "policy = :policy",
       ExpressionAttributeValues: {
         ":policy": policy.name
       }
-    }, function (err, data) {
+    }, function (err: Error, data: { Items: any[]; }) {
       if (err) {
         callback(err);
       } else {
-        var updates = [];
+        var updates: any[] = [];
 
         var ids = data.Items.reduce((sum, each) => {
           sum[each.identity] = true;
@@ -36,9 +42,9 @@ exports.handler = function (event, context, callback) {
 
         // Verify all entries have the default policies object
         Object.keys(ids).forEach(id => {
-          updates.push(function (done) {
+          updates.push(function (done: Callback) {
             console.log("ID", id)
-            dynamodb.docClient.update({
+            dynamodb._service.update({
               TableName: AUTH_TABLE,
               Key: {
                 identity: id
@@ -55,9 +61,9 @@ exports.handler = function (event, context, callback) {
         });
 
         data.Items.forEach(function (identity) {
-          updates.push(function (done) {
+          updates.push(function (done: Callback) {
             console.log("Identity", identity.identity, policy.name, policy.statements)
-            dynamodb.docClient.update({
+            dynamodb._service.update({
               TableName: AUTH_TABLE,
               Key: {
                 identity: identity.identity
@@ -77,16 +83,16 @@ exports.handler = function (event, context, callback) {
     });
   } else {
     var keys = aws.DynamoDB.Converter.unmarshall(record.dynamodb.Keys);
-    dynamodb.docClient.get({
+    dynamodb._service.get({
       TableName: AUTH_TABLE,
       Key: {
         identity: keys.identity
       }
-    }, function (err, data) {
+    }, function (err: Error, data: any) {
       if (err) {
         callback(err);
       } else {
-        var identity = {};
+        var identity: Identity = {};
         if (data.Item) {
           identity = data.Item;
         } else {
@@ -100,12 +106,12 @@ exports.handler = function (event, context, callback) {
           delete identity.policies[keys.policy.toLowerCase()];
           saveIdentity(identity, callback);
         } else {
-          dynamodb.docClient.get({
+          dynamodb._service.get({
             TableName: POLICY_TABLE,
             Key: {
               name: keys.policy
             }
-          }, function (err, data) {
+          }, function (err:Error, data: any) {
             if (err) {
               callback(err);
             } else if (data.Item) {
@@ -113,7 +119,7 @@ exports.handler = function (event, context, callback) {
             } else {
               identity.policies[keys.policy.toLowerCase()] = "";
             }
-            console.log(identity);
+            // console.log(identity);
             saveIdentity(identity, callback);
           });
         }
@@ -122,9 +128,9 @@ exports.handler = function (event, context, callback) {
   }
 };
 
-function saveIdentity(identity, callback) {
+function saveIdentity(identity: Identity, callback: Callback) {
   console.log("out identity", identity);
-  dynamodb.docClient.put({
+  dynamodb._service.put({
     TableName: AUTH_TABLE,
     Item: identity
   }, callback);
