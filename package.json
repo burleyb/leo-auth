@@ -33,8 +33,18 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "overrides": {
+    "leo-sdk": "file:../smartshyp-deps/leo-sdk"
+  },
   "dependencies": {
     "async": "^3.0.1",
     "leo-auth": "^2.0.2"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
+    "@babel/plugin-proposal-function-bind": "^7.22.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.22.5",
+    "@babel/preset-env": "^7.22.5",
+    "babelify": "^10.0.0"
   }
 }

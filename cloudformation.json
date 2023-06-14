@@ -3,10 +3,7 @@
   "Mappings": {
     "RegionMap": {
       "us-east-1": {
-        "S3Bucket": "leo-cli-publishbucket-abb4i613j9y9"
-      },
-      "us-west-2": {
-        "S3Bucket": "leo-cli-publishbucket-mzhr7agmqo7u"
+        "S3Bucket": "leo-cli-publishbucket-42fnsfr2d9kt"
       }
     }
   },
