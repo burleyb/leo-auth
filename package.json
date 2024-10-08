@@ -11,33 +11,33 @@
     "test": "jest",
     "cdk": "cdk"
   },
-  "devDependencies": {
-    "@aws-cdk/assert": "1.87.0",
-    "@aws-cdk/aws-apigateway": "1.87.0",
-    "@aws-cdk/aws-dynamodb": "1.87.0",
-    "@aws-cdk/aws-events-targets": "1.87.0",
-    "@aws-cdk/aws-lambda-nodejs": "1.87.0",
-    "@aws-cdk/custom-resources": "1.87.0",
-    "@types/jest": "^26.0.10",
-    "@types/node": "10.17.27",
-    "aws-cdk": "1.87.0",
-    "jest": "^26.4.2",
-    "ts-jest": "^26.2.0",
-    "ts-node": "^9.0.0",
-    "typescript": "~3.9.7"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "overrides": {
-    "leo-sdk": "file:../leo-sdk"
-  },
+  "overrides": {},
   "dependencies": {
-    "leo-auth": "file:../leo-auth",
-    "@aws-cdk/core": "1.87.0",
+    "@aws-cdk/assert": "^2.68.0",
+    "@aws-cdk/aws-apigateway": "^1.203.0",
+    "@aws-cdk/aws-dynamodb": "^1.203.0",
+    "@aws-cdk/aws-events-targets": "^1.203.0",
+    "@aws-cdk/aws-lambda-nodejs": "^1.203.0",
+    "@aws-cdk/core": "^1.203.0",
+    "@aws-cdk/custom-resources": "^1.203.0",
+    "@types/jest": "^29.5.13",
+    "@types/node": "^22.7.4",
     "async": "^3.2.0",
+    "aws-cdk": "^2.161.1",
+    "jest": "^29.7.0",
+    "leo-auth": "file:../leo-auth",
     "leo-aws": "file:../leo-aws",
     "leo-config": "file:../leo-config",
-    "source-map-support": "^0.5.16"
+    "leo-sdk": "file:../leo-sdk",
+    "source-map-support": "^0.5.16",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
   }
 }
