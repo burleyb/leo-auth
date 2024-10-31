@@ -181,7 +181,6 @@ export class LeoAuthStack extends Stack {
       environment,
       role: leoAuthRole,
       bundling: {
-        nodeModules: ["leo-config", "leo-auth"],
       },
     });
     normalizeDataLambda.addEventSourceMapping("LeoAuthPolicyEventSource", {
@@ -203,7 +202,6 @@ export class LeoAuthStack extends Stack {
       timeout: Duration.seconds(30),
       role: leoAuthRole,
       bundling: {
-        nodeModules: ["leo-config", "leo-auth"],
       },
     });
 
@@ -240,7 +238,6 @@ export class LeoAuthStack extends Stack {
       environment,
       role: apiRole,
       bundling: {
-        nodeModules: ["leo-config", "leo-auth"],
       },
     });
 
