@@ -1,36 +1,39 @@
 import * as path from "path";
-import { RetentionDays } from "@aws-cdk/aws-logs";
-import { Rule, Schedule } from "@aws-cdk/aws-events";
-import { Provider } from "@aws-cdk/custom-resources";
-import { NodejsFunction } from "@aws-cdk/aws-lambda-nodejs";
-import { LambdaFunction } from "@aws-cdk/aws-events-targets";
-import { Runtime, StartingPosition } from "@aws-cdk/aws-lambda";
-import { SpecRestApi, ApiDefinition } from "@aws-cdk/aws-apigateway";
+import { RetentionDays } from "aws-cdk-lib/aws-logs";
+import { Rule, Schedule } from "aws-cdk-lib/aws-events";
+import { Provider } from "aws-cdk-lib/custom-resources";
+import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
+import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
+import { Runtime, StartingPosition } from 'aws-cdk-lib/aws-lambda'; 
+import { SpecRestApi, ApiDefinition } from "aws-cdk-lib/aws-apigateway";
+import { Construct } from 'constructs';
+
 import {
   Table,
   AttributeType,
   StreamViewType,
   ProjectionType,
-} from "@aws-cdk/aws-dynamodb";
+  BillingMode,
+} from "aws-cdk-lib/aws-dynamodb";
 import {
   Role,
+  IRole,
   ServicePrincipal,
   AccountRootPrincipal,
   ManagedPolicy,
   PolicyDocument,
   PolicyStatement,
-} from "@aws-cdk/aws-iam";
+} from "aws-cdk-lib/aws-iam";
 import {
   CustomResource,
   Stack,
-  Construct,
   StackProps,
   CfnOutput,
   Fn,
   CfnParameter,
   Duration,
   RemovalPolicy,
-} from "@aws-cdk/core";
+} from "aws-cdk-lib/core";
 
 export class LeoAuthStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -113,8 +116,7 @@ export class LeoAuthStack extends Stack {
     const leoAuth = new Table(this, "LeoAuth", {
       partitionKey: { name: "identity", type: AttributeType.STRING },
       removalPolicy: RemovalPolicy.DESTROY,
-      readCapacity: 100,
-      writeCapacity: 10,
+      billingMode: BillingMode.PAY_PER_REQUEST,
     });
 
     new CfnOutput(this, "LeoAuthTableNameOutput", {
@@ -125,8 +127,7 @@ export class LeoAuthStack extends Stack {
     const leoAuthUser = new Table(this, "LeoAuthUser", {
       partitionKey: { name: "identity_id", type: AttributeType.STRING },
       removalPolicy: RemovalPolicy.DESTROY,
-      readCapacity: 100,
-      writeCapacity: 10,
+      billingMode: BillingMode.PAY_PER_REQUEST,
     });
 
     new CfnOutput(this, "LeoAuthUserTableNameOutput", {
@@ -137,8 +138,7 @@ export class LeoAuthStack extends Stack {
     const leoAuthPolicy = new Table(this, "LeoAuthPolicy", {
       partitionKey: { name: "name", type: AttributeType.STRING },
       removalPolicy: RemovalPolicy.DESTROY,
-      readCapacity: 3,
-      writeCapacity: 3,
+      billingMode: BillingMode.PAY_PER_REQUEST,
       stream: StreamViewType.NEW_IMAGE,
     });
 
@@ -146,8 +146,7 @@ export class LeoAuthStack extends Stack {
       partitionKey: { name: "identity", type: AttributeType.STRING },
       removalPolicy: RemovalPolicy.DESTROY,
       sortKey: { name: "policy", type: AttributeType.STRING },
-      readCapacity: 5,
-      writeCapacity: 5,
+      billingMode: BillingMode.PAY_PER_REQUEST,
       stream: StreamViewType.KEYS_ONLY,
     });
 
@@ -156,8 +155,6 @@ export class LeoAuthStack extends Stack {
       partitionKey: { name: "policy", type: AttributeType.STRING },
       sortKey: { name: "identity", type: AttributeType.STRING },
       projectionType: ProjectionType.KEYS_ONLY,
-      readCapacity: 5,
-      writeCapacity: 5,
     });
 
     const resources =
@@ -178,14 +175,13 @@ export class LeoAuthStack extends Stack {
     };
 
     const normalizeDataLambda = new NodejsFunction(this, "NormalizeData", {
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_20_X,
       entry: path.join(__dirname, "..", "lambda", "normalize-data", "index.ts"),
       handler: "handler",
       environment,
       role: leoAuthRole,
       bundling: {
         nodeModules: ["leo-config", "leo-auth"],
-        externalModules: ["aws-sdk"],
       },
     });
     normalizeDataLambda.addEventSourceMapping("LeoAuthPolicyEventSource", {
@@ -200,7 +196,7 @@ export class LeoAuthStack extends Stack {
     });
 
     const seedDatabaseLambda = new NodejsFunction(this, "SeedDatabase", {
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_20_X,
       entry: path.join(__dirname, "..", "lambda", "seed-database", "index.ts"),
       handler: "handler",
       environment,
@@ -208,7 +204,6 @@ export class LeoAuthStack extends Stack {
       role: leoAuthRole,
       bundling: {
         nodeModules: ["leo-config", "leo-auth"],
-        externalModules: ["aws-sdk"],
       },
     });
 
@@ -239,14 +234,13 @@ export class LeoAuthStack extends Stack {
     });
 
     const authorize = new NodejsFunction(this, "Authorize", {
-      runtime: Runtime.NODEJS_12_X,
+      runtime: Runtime.NODEJS_20_X,
       entry: path.join(__dirname, "..", "api", "authorize", "index.ts"),
       handler: "handler",
       environment,
       role: apiRole,
       bundling: {
         nodeModules: ["leo-config", "leo-auth"],
-        externalModules: ["aws-sdk"],
       },
     });
 

@@ -23,9 +23,7 @@
         }
       },
       "regions": [
-        "us-east-1",
-        "us-west-2",
-        "ap-southeast-2"
+        "us-east-1"
       ],
       "3rdParty": true,
       "excludeProfiles": true
@@ -35,7 +33,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.764.0",
     "async": "^3.0.1",
     "leo-auth": "^2.0.2"
   }

@@ -16,28 +16,30 @@
   "license": "ISC",
   "overrides": {},
   "dependencies": {
-    "@aws-cdk/assert": "^2.68.0",
-    "@aws-cdk/aws-apigateway": "^1.203.0",
-    "@aws-cdk/aws-dynamodb": "^1.203.0",
-    "@aws-cdk/aws-events-targets": "^1.203.0",
-    "@aws-cdk/aws-lambda-nodejs": "^1.203.0",
-    "@aws-cdk/core": "^1.203.0",
-    "@aws-cdk/custom-resources": "^1.203.0",
+    "@aws-sdk/core": "^3.667.0",
+    "@aws-sdk/util-dynamodb": "^3.674.0",
     "@types/jest": "^29.5.13",
-    "@types/node": "^22.7.4",
-    "async": "^3.2.0",
-    "aws-cdk": "^2.161.1",
+    "@types/node": "^22.7.5",
+    "async": "^3.2.6",
+    "aws-cdk-lib": "^2.164.1",
+    "constructs": "^10.0.0",
     "jest": "^29.7.0",
     "leo-auth": "file:../leo-auth",
     "leo-aws": "file:../leo-aws",
     "leo-config": "file:../leo-config",
     "leo-sdk": "file:../leo-sdk",
-    "source-map-support": "^0.5.16",
+    "semver": "^7.6.3",
+    "source-map-support": "^0.5.21",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.3"
+  },
+  "peerDependencies": {
+    "constructs": "^10.0.0"
   },
   "devDependencies": {
-    "esbuild": "^0.24.0"
+    "constructs": "^10.0.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.6.3"
   }
 }

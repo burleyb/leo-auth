@@ -1,4 +1,4 @@
-var aws = require("aws-sdk");
+const { unmarshall } = require("@aws-sdk/util-dynamodb");
 const config = require("leo-config");
 const env = process.env.LEO_ENVIRONMENT as string
 const resourcesJson = JSON.parse(process.env.Resources as string);
@@ -20,7 +20,7 @@ export function handler(event: Event, _: any, callback: Callback) {
   console.log(record.eventSourceARN);
   if (record.eventSourceARN.match(POLICY_TABLE)) {
     console.log(JSON.stringify(record, null, 2));
-    var policy = aws.DynamoDB.Converter.unmarshall(record.dynamodb.NewImage);
+    var policy = unmarshall(record.dynamodb.NewImage);
     console.log(JSON.stringify(policy,null, 2));
     dynamodb._service.query({
       TableName: IDENTITY_TABLE,
@@ -82,7 +82,7 @@ export function handler(event: Event, _: any, callback: Callback) {
       }
     });
   } else {
-    var keys = aws.DynamoDB.Converter.unmarshall(record.dynamodb.Keys);
+    var keys = unmarshall(record.dynamodb.Keys);
     dynamodb._service.get({
       TableName: AUTH_TABLE,
       Key: {

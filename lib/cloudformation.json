@@ -3,17 +3,7 @@
   "Mappings": {
     "RegionMap": {
       "us-east-1": {
-<<<<<<< HEAD:cloudformation.json
-        "S3Bucket": "leo-cli-publishbucket-42fnsfr2d9kt"
-=======
-        "S3Bucket": "leo-cli-publishbucket-1krooif6c32du"
-      },
-      "us-west-2": {
-        "S3Bucket": "leo-cli-publishbucket-1ib49osnzmi3c"
-      },
-      "ap-southeast-2": {
-        "S3Bucket": "leo-cli-publishbucket-1peyjitrpw1wd"
->>>>>>> upstream/UpgradeLeoAuth:lib/cloudformation.json
+        "S3Bucket": "leo-cli-publishbucket-qzoiwmdgdtjy"
       }
     }
   },
@@ -180,6 +170,7 @@
             "KeyType": "HASH"
           }
         ],
+        "BillingMode": "PAY_PER_REQUEST",
         "ProvisionedThroughput": {
           "ReadCapacityUnits": "100",
           "WriteCapacityUnits": "10"
@@ -201,6 +192,7 @@
             "KeyType": "HASH"
           }
         ],
+        "BillingMode": "PAY_PER_REQUEST",
         "ProvisionedThroughput": {
           "ReadCapacityUnits": "100",
           "WriteCapacityUnits": "10"
@@ -222,6 +214,7 @@
             "KeyType": "HASH"
           }
         ],
+        "BillingMode": "PAY_PER_REQUEST",
         "ProvisionedThroughput": {
           "ReadCapacityUnits": "3",
           "WriteCapacityUnits": "3"
@@ -254,6 +247,7 @@
             "KeyType": "RANGE"
           }
         ],
+        "BillingMode": "PAY_PER_REQUEST",
         "ProvisionedThroughput": {
           "ReadCapacityUnits": "5",
           "WriteCapacityUnits": "5"
@@ -277,6 +271,7 @@
             "Projection": {
               "ProjectionType": "KEYS_ONLY"
             },
+            "BillingMode": "PAY_PER_REQUEST",
             "ProvisionedThroughput": {
               "ReadCapacityUnits": "5",
               "WriteCapacityUnits": "5"
