@@ -8,8 +8,7 @@ const env = process.env.LEO_ENVIRONMENT as string;
 const resourcesJson = JSON.parse(process.env.Resources as string);
 config.bootstrap({ [env]: { leoaws: resourcesJson } });
 const leoAws = require("leo-aws");
-
-export type Callback = (err: Error | null, data?: any) => void;
+const logger = require("leo-logger");
 
 export interface Event {
   ResponseURL?: any;
@@ -44,12 +43,12 @@ export interface Identity {
   policy: Policy | "*";
 }
 
-export function handler(event: Event, _: any, callback: Callback) {
-  console.log(event);
+export async function handler(event: Event, _: any) {
+  logger.log(event);
 
   function sendResponse(result: Response) {
     return new Promise((resolve, reject) => {
-      console.log(result);
+      logger.log(result);
       var responseBody = JSON.stringify(result);
       var parsedUrl = url.parse(event.ResponseURL);
       var options = {
@@ -64,13 +63,13 @@ export function handler(event: Event, _: any, callback: Callback) {
       };
 
       var request = https.request(options, function (response: HttpResponse) {
-        console.log("Status code: " + response.statusCode);
-        console.log("Status message: " + response.statusMessage);
+        logger.log("Status code: " + response.statusCode);
+        logger.log("Status message: " + response.statusMessage);
         resolve(result);
       });
 
       request.on("error", function (error: Error) {
-        console.log("send(..) failed executing https.request(..): " + error);
+        logger.log("send(..) failed executing https.request(..): " + error);
         reject(error);
       });
       request.write(responseBody);
@@ -79,8 +78,8 @@ export function handler(event: Event, _: any, callback: Callback) {
   }
 
   process.on("uncaughtException", function (err) {
-    console.log("Got unhandled Exception");
-    console.log(err);
+    logger.log("Got unhandled Exception");
+    logger.log(err);
     return sendResponse({
       Status: "FAILED",
       Reason: "Uncaught Exception",
@@ -107,10 +106,10 @@ export function handler(event: Event, _: any, callback: Callback) {
         ]
       : [];
 
-  console.log("STEPS", steps);
+  logger.log("STEPS", steps);
   const sendRespPromise = Promise.all(steps)
     .then((foo) => {
-      console.log("Got success", foo);
+      logger.log("Got success", foo);
       return sendResponse({
         Status: "SUCCESS",
         PhysicalResourceId: event.PhysicalResourceId,
@@ -120,8 +119,8 @@ export function handler(event: Event, _: any, callback: Callback) {
       });
     })
     .catch((err) => {
-      console.log("Got error");
-      console.log(err);
+      logger.log("Got error");
+      logger.log(err);
       return sendResponse({
         Status: "FAILED",
         Reason: "it failed",
@@ -133,15 +132,14 @@ export function handler(event: Event, _: any, callback: Callback) {
     });
   sendRespPromise
     .then((resp) => {
-      callback(null, resp);
+      return resp;
     })
-    .catch(callback);
 }
 
 function addPolicy(policy: Policy): Promise<any> {
   return new Promise((resolve, reject) => {
-    console.log("Adding policy", leoAws.config.LeoAuthPolicy, policy);
-    leoAws.dynamodb._service.update(
+    logger.log("Adding policy", leoAws.config.LeoAuthPolicy, policy);
+    leoAws.dynamodb.update(
       {
         TableName: leoAws.config.LeoAuthPolicy,
         Key: {
@@ -165,8 +163,8 @@ function addPolicy(policy: Policy): Promise<any> {
 
 function addIdentity(identity: Identity): Promise<any> {
   return new Promise((resolve, reject) => {
-    console.log("Adding Identity", leoAws.config.LeoAuthIdentity, identity);
-    leoAws.dynamodb._service.update(
+    logger.log("Adding Identity", leoAws.config.LeoAuthIdentity, identity);
+    leoAws.dynamodb.update(
       {
         TableName: leoAws.config.LeoAuthIdentity,
         Key: {

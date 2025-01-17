@@ -1,8 +1,8 @@
 import { handler } from "../lambda/seed-database/index";
 
 describe("seed-database", () => {
-  it.skip("works", (done) => {
-    handler(
+  it.skip("works", async () => {
+    const response = await handler(
       {
         LogicalResourceId: "logicalResourceId",
         PhysicalResourceId: "physicalResourceId",
@@ -11,12 +11,9 @@ describe("seed-database", () => {
         ResponseURL: "https://example.com/responseURL",
         StackId: "stackId",
       },
-      {},
-      (err, response) => {
-        if (err) return done(err);
+      {})
         console.log("TEST RESP", response);
-        done();
+        return response
       }
     );
   });
-});
